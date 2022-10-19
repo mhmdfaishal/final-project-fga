@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"errors"
-	"fmt"
 	"final-project-fga/internal/domain"
+	"fmt"
 	"net/http"
 	"strconv"
 

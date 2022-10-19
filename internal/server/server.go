@@ -61,11 +61,10 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	photoRouter := router.Group("/photos")
 	{
 		photoRouter.Use(middlewares.Authentication())
-		photoRouter.Use(middlewares.PhotoAuthorization(db))
 		photoRouter.POST("/", photoHandler.Create)
 		photoRouter.GET("/", photoHandler.GetPhotos)
-		photoRouter.PUT("/:photoId", photoHandler.Update)
-		photoRouter.DELETE("/:photoId", photoHandler.Delete)
+		photoRouter.Use(middlewares.PhotoAuthorization(db)).PUT("/:photoId", photoHandler.Update)
+		photoRouter.Use(middlewares.PhotoAuthorization(db)).DELETE("/:photoId", photoHandler.Delete)
 	}
 
 	commentHandler := handler.NewCommentHandler(db)
@@ -73,11 +72,10 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	commentRouter := router.Group("/comments")
 	{
 		commentRouter.Use(middlewares.Authentication())
-		commentRouter.Use(middlewares.CommentAuthorization(db))
 		commentRouter.POST("/", commentHandler.Create)
 		commentRouter.GET("/", commentHandler.GetComments)
-		commentRouter.PUT("/:commentId", commentHandler.Update)
-		commentRouter.DELETE("/:commentId", commentHandler.Delete)
+		commentRouter.Use(middlewares.CommentAuthorization(db)).PUT("/:commentId", commentHandler.Update)
+		commentRouter.Use(middlewares.CommentAuthorization(db)).DELETE("/:commentId", commentHandler.Delete)
 	}
 
 	socialMediaHandler := handler.NewSocialMediaHandler(db)
@@ -85,11 +83,10 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	socialMediaRouter := router.Group("/socialmedias")
 	{
 		socialMediaRouter.Use(middlewares.Authentication())
-		socialMediaRouter.Use(middlewares.SocialMediaAuthorization(db))
 		socialMediaRouter.POST("/", socialMediaHandler.Create)
 		socialMediaRouter.GET("/", socialMediaHandler.GetSocialMedias)
-		socialMediaRouter.PUT("/:socialMediaId", socialMediaHandler.Update)
-		socialMediaRouter.DELETE("/:socialMediaId", socialMediaHandler.Delete)
+		socialMediaRouter.Use(middlewares.SocialMediaAuthorization(db)).PUT("/:socialMediaId", socialMediaHandler.Update)
+		socialMediaRouter.Use(middlewares.SocialMediaAuthorization(db)).DELETE("/:socialMediaId", socialMediaHandler.Delete)
 	}
 
 	return router
