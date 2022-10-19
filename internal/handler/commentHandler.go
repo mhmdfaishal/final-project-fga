@@ -198,15 +198,23 @@ func (co *CommentHandler) Update(c *gin.Context) {
 		})
 		return
 	}
-
+	Photo := domain.Photo{}
+	err = db.Where("id = ?", Comment.PhotoID).First(&Photo).Error
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 	c.JSON(200, gin.H{
 		"status": 200,
 		"data": gin.H{
-			"id":         Comment.ID,
-			"title":      Comment.Message,
-			"photo_id":   Comment.PhotoID,
-			"user_id":    Comment.UserID,
-			"created_at": Comment.CreatedAt,
+			"id":         Photo.ID,
+			"title":      Photo.Title,
+			"caption":    Photo.Caption,
+			"photo_url":  Photo.PhotoURL,
+			"user_id":    Photo.UserID,
+			"updated_at": Photo.UpdatedAt,
 		},
 	})
 }
