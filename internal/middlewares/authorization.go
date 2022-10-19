@@ -24,8 +24,8 @@ func Authorization(param, modelName string, validate func(id, userID uint) (int,
 			return
 		}
 
-		userData := ctx.MustGet("userData").(jwt.MapClaims)
-		userID := uint(userData["id"].(float64))
+		user := ctx.MustGet("user").(jwt.MapClaims)
+		userID := uint(user["id"].(float64))
 
 		if code, err := validate(uint(parseId), userID); err != nil {
 			ctx.AbortWithStatusJSON(code, gin.H{
