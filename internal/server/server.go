@@ -61,6 +61,7 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	photoRouter := router.Group("/photos")
 	{
 		photoRouter.Use(middlewares.Authentication())
+		photoRouter.Use(middlewares.PhotoAuthorization(db))
 		photoRouter.POST("/", photoHandler.Create)
 		photoRouter.GET("/", photoHandler.GetPhotos)
 		photoRouter.PUT("/:photoId", photoHandler.Update)
@@ -72,6 +73,7 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	commentRouter := router.Group("/comments")
 	{
 		commentRouter.Use(middlewares.Authentication())
+		commentRouter.Use(middlewares.CommentAuthorization(db))
 		commentRouter.POST("/", commentHandler.Create)
 		commentRouter.GET("/", commentHandler.GetComments)
 		commentRouter.PUT("/:commentId", commentHandler.Update)
@@ -83,6 +85,7 @@ func (s *Server) Route(db *gorm.DB) *gin.Engine {
 	socialMediaRouter := router.Group("/socialmedias")
 	{
 		socialMediaRouter.Use(middlewares.Authentication())
+		socialMediaRouter.Use(middlewares.SocialMediaAuthorization(db))
 		socialMediaRouter.POST("/", socialMediaHandler.Create)
 		socialMediaRouter.GET("/", socialMediaHandler.GetSocialMedias)
 		socialMediaRouter.PUT("/:socialMediaId", socialMediaHandler.Update)
